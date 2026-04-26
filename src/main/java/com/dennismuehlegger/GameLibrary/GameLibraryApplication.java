@@ -1,4 +1,4 @@
-package com.dennismuehlegger.game_library;
+package com.dennismuehlegger.GameLibrary;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
