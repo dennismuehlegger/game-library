@@ -1,2 +1,7 @@
-package com.dennismuehlegger.Entitites;public class User {
+package com.dennismuehlegger.Entitites;
+
+import jakarta.persistence.Entity;
+
+@Entity
+public class User {
 }

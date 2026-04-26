@@ -1,2 +1,7 @@
-package com.dennismuehlegger.Entitites;public class Game {
+package com.dennismuehlegger.Entitites;
+
+import jakarta.persistence.Entity;
+
+@Entity
+public class Game {
 }
