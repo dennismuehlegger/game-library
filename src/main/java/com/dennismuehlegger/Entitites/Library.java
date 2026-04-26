@@ -1,11 +1,9 @@
 package com.dennismuehlegger.Entitites;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "libraries")
 public class Library {
     @Id
     @GeneratedValue
