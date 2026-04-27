@@ -1,4 +1,4 @@
-package com.dennismuehlegger.Entitites;
+package com.dennismuehlegger.gamelibrary.entity;
 
 import jakarta.persistence.*;
 
@@ -11,7 +11,7 @@ public class Game {
     @GeneratedValue
     private Long id;
     private String name;
-    private int price;
+    private double price;
     private int releaseYear;
 
     public Long getId() {
@@ -30,11 +30,11 @@ public class Game {
         this.name = name;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

@@ -1,4 +1,4 @@
-package com.dennismuehlegger.GameLibrary;
+package com.dennismuehlegger.gamelibrary;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

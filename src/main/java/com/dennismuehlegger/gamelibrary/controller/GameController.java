@@ -1,6 +1,7 @@
-package com.dennismuehlegger.GameLibrary;
+package com.dennismuehlegger.gamelibrary.controller;
 
-import com.dennismuehlegger.Entitites.Game;
+import com.dennismuehlegger.gamelibrary.entity.Game;
+import com.dennismuehlegger.gamelibrary.repository.GameRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

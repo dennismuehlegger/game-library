@@ -1,4 +1,4 @@
-package com.dennismuehlegger.Entitites;
+package com.dennismuehlegger.gamelibrary.entity;
 
 import jakarta.persistence.*;
 
@@ -31,5 +31,30 @@ public class Library {
 
     public void setHoursPlayed(int hoursPlayed) {
         this.hoursPlayed = hoursPlayed;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    @Override
+    public String toString() {
+        return "Library{" +
+                "id=" + id +
+                ", user=" + user.getUsername() +
+                ", game=" + game.getName() +
+                '}';
     }
 }

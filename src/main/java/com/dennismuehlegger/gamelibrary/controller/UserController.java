@@ -1,6 +1,9 @@
-package com.dennismuehlegger.GameLibrary;
+package com.dennismuehlegger.gamelibrary.controller;
 
-import com.dennismuehlegger.Entitites.User;
+import com.dennismuehlegger.gamelibrary.entity.User;
+import com.dennismuehlegger.gamelibrary.repository.UserRepository;
+import com.dennismuehlegger.gamelibrary.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,8 +14,11 @@ class UserController {
 
     private final UserRepository repository;
 
-    UserController(UserRepository repository) {
+    private final UserService userService;
+
+    UserController(UserRepository repository, UserService userService) {
         this.repository = repository;
+        this.userService = userService;
     }
 
 
@@ -50,5 +56,11 @@ class UserController {
     @DeleteMapping("/{id}")
     void deleteUser(@PathVariable Long id) {
         repository.deleteById(id);
+    }
+
+    @PostMapping("/{userId}/games/{gameId}/buy")
+    public ResponseEntity<Void> buyGame(@PathVariable Long userId, @PathVariable Long gameId) {
+        userService.buyGame(userId, gameId);
+        return ResponseEntity.ok().build();
     }
 }

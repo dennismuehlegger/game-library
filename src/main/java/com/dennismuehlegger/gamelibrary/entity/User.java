@@ -1,4 +1,4 @@
-package com.dennismuehlegger.Entitites;
+package com.dennismuehlegger.gamelibrary.entity;
 
 import jakarta.persistence.*;
 
@@ -12,6 +12,7 @@ public class User {
     private Long id;
     private String username;
     private String email;
+    private double funds;
 
     public Long getId() {
         return id;
@@ -35,6 +36,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public double getFunds() {
+        return funds;
+    }
+
+    public void setFunds(double funds) {
+        this.funds = funds;
     }
 
     public List<Library> getLibraries() {
