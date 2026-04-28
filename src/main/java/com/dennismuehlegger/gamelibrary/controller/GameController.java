@@ -2,6 +2,8 @@ package com.dennismuehlegger.gamelibrary.controller;
 
 import com.dennismuehlegger.gamelibrary.entity.Game;
 import com.dennismuehlegger.gamelibrary.repository.GameRepository;
+import com.dennismuehlegger.gamelibrary.service.GameService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,14 +14,11 @@ class GameController {
 
     private final GameRepository repository;
 
-    GameController(GameRepository repository) {
+    private final GameService gameService;
+
+    GameController(GameRepository repository, GameService gameService) {
         this.repository = repository;
-    }
-
-
-    @GetMapping
-    List<Game> all() {
-        return repository.findAll();
+        this.gameService = gameService;
     }
 
     @PostMapping
@@ -27,11 +26,14 @@ class GameController {
         return repository.save(newGame);
     }
 
-    @GetMapping("/{id}")
-    Game getGame(@PathVariable Long id) {
-
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException(String.valueOf(id)));
+    @GetMapping
+    public List<Game> getGames(
+            @RequestParam(required = false) Integer releaseYear,
+            @RequestParam(required = false) Double price,
+            @RequestParam(required = false) String name
+    ) {
+        List<Game> games = repository.findAll();
+        return gameService.filterGames(games, releaseYear, price, name);
     }
 
     @PutMapping("/{id}")
@@ -52,6 +54,14 @@ class GameController {
     @DeleteMapping("/{id}")
     void deleteGame(@PathVariable Long id) {
         repository.deleteById(id);
+    }
+
+    @PostMapping("/sort")
+    public List<Game> sortGames(@RequestParam(required = false) Boolean releaseYear,
+                                        @RequestParam(required = false) Boolean price,
+                                        @RequestParam(required = false) Boolean name) {
+        List<Game> games = repository.findAll();
+        return gameService.sortGames(games, releaseYear, price, name);
     }
 }
 
