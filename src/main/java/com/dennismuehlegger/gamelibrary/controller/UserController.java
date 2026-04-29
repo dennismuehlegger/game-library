@@ -63,4 +63,10 @@ class UserController {
         userService.buyGame(userId, gameId);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/{userId}/history")
+    public ResponseEntity<Void> getTransactionHistory(@PathVariable Long userId) {
+        userService.getTransactionHistory(userId);
+        return ResponseEntity.ok().build();
+    }
 }

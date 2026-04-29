@@ -46,6 +46,11 @@ public class Game {
         this.releaseYear = releaseYear;
     }
 
-    @OneToMany(mappedBy = "game")
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Library> libraries;
+
+    @Override
+    public String toString() {
+        return "game " + getName();
+    }
 }

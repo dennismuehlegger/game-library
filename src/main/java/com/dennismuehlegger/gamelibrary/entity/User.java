@@ -54,6 +54,11 @@ public class User {
         this.libraries = libraries;
     }
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Library> libraries;
+
+    @Override
+    public String toString() {
+        return "user " + getUsername();
+    }
 }

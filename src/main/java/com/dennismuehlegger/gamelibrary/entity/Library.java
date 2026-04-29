@@ -1,5 +1,6 @@
 package com.dennismuehlegger.gamelibrary.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,9 +11,11 @@ public class Library {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     private User user;
 
     @ManyToOne
+    @JsonIgnore
     private Game game;
 
     private int hoursPlayed;
