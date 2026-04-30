@@ -3,31 +3,56 @@ package com.dennismuehlegger.gamelibrary.service;
 import com.dennismuehlegger.gamelibrary.entity.Game;
 import com.dennismuehlegger.gamelibrary.entity.Library;
 import com.dennismuehlegger.gamelibrary.entity.User;
+import com.dennismuehlegger.gamelibrary.repository.GameRepository;
 import com.dennismuehlegger.gamelibrary.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService {
 
-    private final GameService gameService;
+    private final GameRepository gameRepository;
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository, GameService gameService) {
+    public UserService(UserRepository userRepository, GameRepository gameRepository) {
         this.userRepository = userRepository;
-        this.gameService = gameService;
+        this.gameRepository = gameRepository;
     }
 
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public User create(User user) {
+        return userRepository.save(user);
+    }
+
+    public User findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found: " + id));
+    }
+
+    public User update(Long id, User newUser) {
+        return userRepository.findById(id)
+                .map(user -> {
+                    user.setUsername(newUser.getUsername());
+                    user.setEmail(newUser.getEmail());
+                    return userRepository.save(user);
+                })
+                .orElseGet(() -> userRepository.save(newUser));
+    }
+
+    public void delete(Long id) {
+        userRepository.deleteById(id);
     }
 
     @Transactional
     public void buyGame(Long userId, Long gameId) {
-        Optional<User> userOptional = getUserById(userId);
-        Optional<Game> gameOptional = gameService.getGameById(gameId);
+        Optional<User> userOptional = userRepository.findById(userId);
+        Optional<Game> gameOptional = gameRepository.findById(gameId);
 
         if (userOptional.isEmpty() || gameOptional.isEmpty()) {
             return;
@@ -59,9 +84,9 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void getTransactionHistory(Long userId){
-        Optional<User> userOptional = getUserById(userId);
-        if (userOptional.isPresent()){
+    public void getTransactionHistory(Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
             User user = userOptional.get();
             user.getLibraries().forEach(library -> {
                 System.out.println(user + " has bought " + library.getGame().getName() + " for " + library.getGame().getPrice() + "€");

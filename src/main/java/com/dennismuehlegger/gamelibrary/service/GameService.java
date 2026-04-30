@@ -16,8 +16,27 @@ public class GameService {
         this.gameRepository = gameRepository;
     }
 
-    public Optional<Game> getGameById(Long id) {
-        return gameRepository.findById(id);
+    public List<Game> findAll() {
+        return gameRepository.findAll();
+    }
+
+    public Game create(Game game) {
+        return gameRepository.save(game);
+    }
+
+    public Game update(Long id, Game newGame) {
+        return gameRepository.findById(id)
+                .map(game -> {
+                    game.setName(newGame.getName());
+                    game.setPrice(newGame.getPrice());
+                    game.setReleaseYear(newGame.getReleaseYear());
+                    return gameRepository.save(game);
+                })
+                .orElseGet(() -> gameRepository.save(newGame));
+    }
+
+    public void delete(Long id) {
+        gameRepository.deleteById(id);
     }
 
     public List<Game> filterGames(List<Game> games, Integer releaseYear, Double minPrice, Double maxPrice, Double exactPrice, String name) {

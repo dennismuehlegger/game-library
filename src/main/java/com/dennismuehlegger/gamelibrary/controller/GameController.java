@@ -11,18 +11,15 @@ import java.util.List;
 @RequestMapping("/games")
 class GameController {
 
-    private final GameRepository repository;
-
     private final GameService gameService;
 
     GameController(GameRepository repository, GameService gameService) {
-        this.repository = repository;
         this.gameService = gameService;
     }
 
     @PostMapping
     Game newGame(@RequestBody Game newGame) {
-        return repository.save(newGame);
+        return gameService.create(newGame);
     }
 
     @GetMapping
@@ -33,28 +30,18 @@ class GameController {
             @RequestParam(required = false) Double exactPrice,
             @RequestParam(required = false) String name
     ) {
-        List<Game> games = repository.findAll();
+        List<Game> games = gameService.findAll();
         return gameService.filterGames(games, releaseYear, minPrice, maxPrice, exactPrice, name);
     }
 
     @PutMapping("/{id}")
     Game replaceGame(@RequestBody Game newGame, @PathVariable Long id) {
-
-        return repository.findById(id)
-                .map(game -> {
-                    game.setName(newGame.getName());
-                    game.setPrice(newGame.getPrice());
-                    game.setReleaseYear(newGame.getReleaseYear());
-                    return repository.save(game);
-                })
-                .orElseGet(() -> {
-                    return repository.save(newGame);
-                });
+        return gameService.update(id, newGame);
     }
 
     @DeleteMapping("/{id}")
     void deleteGame(@PathVariable Long id) {
-        repository.deleteById(id);
+        gameService.delete(id);
     }
 
     @PostMapping("/sort")
@@ -62,7 +49,7 @@ class GameController {
                                         @RequestParam(required = false) Boolean price,
                                         @RequestParam(required = false) Boolean name,
                                 @RequestParam(required = false) Boolean descending) {
-        List<Game> games = repository.findAll();
+        List<Game> games = gameService.findAll();
         return gameService.sortGames(games, releaseYear, price, name, descending);
     }
 }

@@ -12,52 +12,42 @@ import java.util.List;
 @RequestMapping("/users")
 class UserController {
 
-    private final UserRepository repository;
 
     private final UserService userService;
 
     UserController(UserRepository repository, UserService userService) {
-        this.repository = repository;
         this.userService = userService;
     }
 
 
     @GetMapping
     List<User> all() {
-        return repository.findAll();
+        return userService.findAll();
     }
 
     @PostMapping
     User newUser(@RequestBody User newUser) {
-        return repository.save(newUser);
+        return userService.create(newUser);
     }
 
     @GetMapping("/{id}")
     User getUser(@PathVariable Long id) {
 
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException(String.valueOf(id)));
+        return userService.findById(id);
     }
 
     @PutMapping("/{id}")
     User replaceUser(@RequestBody User newUser, @PathVariable Long id) {
 
-        return repository.findById(id)
-                .map(user -> {
-                    user.setUsername(newUser.getUsername());
-                    user.setEmail(newUser.getEmail());
-                    return repository.save(user);
-                })
-                .orElseGet(() -> {
-                    return repository.save(newUser);
-                });
+        return userService.update(id, newUser);
     }
 
     @DeleteMapping("/{id}")
     void deleteUser(@PathVariable Long id) {
-        repository.deleteById(id);
+        userService.delete(id);
     }
 
+    // todo - fix responses
     @PostMapping("/{userId}/games/{gameId}/buy")
     public ResponseEntity<Void> buyGame(@PathVariable Long userId, @PathVariable Long gameId) {
         userService.buyGame(userId, gameId);
