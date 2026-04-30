@@ -1,36 +1,79 @@
-# game-library
+# Game Library
 
-## JUST CONCEPTING PHASE RIGHT NOW
+**Status: Early development**
 
-A backend-focused Java project designed to practice clean application architecture using a simple database-backed system.
+A backend-focused Java project built with Spring Boot to practice clean architecture, CRUD operations, and separation of concerns.
 
-Unlike my Criteria API project, which focuses on advanced query construction and dynamic filtering logic, this project focuses on **application structure, CRUD operations, and separation of concerns**.
+---
 
-## Goal
+## Overview
 
-To build a simple but well-structured backend application that manages a personal game library using a database.
+This project models a simple game library system where users can manage games and interact with a basic marketplace (planned).
 
-## Core Features
+The focus is on:
 
-- Add a game
-- Update game details (e.g. status, hours played)
-- Delete a game
-- View all games
-- Filter games by:
-  - status (BACKLOG / COMPLETED)
-  - genre
-  - platform
-- Sort games by title, release year, or hours played
+* Layered architecture (Controller → Service → Repository)
+* Clean separation of concerns
+* Maintainable backend design
 
-## Architecture Focus
+---
 
-- Clear separation of layers:
-  - Controller / input layer (CLI)
-  - Service layer (business logic)
-  - Repository layer (database access)
-- Persistent storage using H2 database
-- CRUD-based application design
+## Current Features
+
+### Users
+
+* Create, read, update, delete users
+* Buy games
+* Transaction history
+
+### Games
+
+* Basic CRUD operations
+
+---
+
+## Planned Features
+
+* Authentication for users (login / registration)
+* Transaction system improvements
+* Expanded filtering & sorting:
+* Simple grid-based UI with cover art - tabs for transaction history, library and store
+
+---
+
+## Architecture
+
+* **Controller layer** – REST endpoints
+* **Service layer** – business logic
+* **Repository layer** – database access
+* **Database** – H2 (in-memory)
+
+---
+
+## How to Run
+
+```bash
+./mvnw spring-boot:run
+```
+
+Then access:
+
+```
+http://localhost:8080/users
+```
+
+---
 
 ## Purpose
 
-This project is intended to strengthen backend application design skills rather than advanced query construction.
+This project is designed to strengthen backend engineering skills, especially:
+
+* Structuring Spring applications
+* Designing clean service layers
+* Designing frontend layers in tandem with backend application
+
+---
+
+## Notes
+
+This is a learning project and is actively evolving. Structure and features may change.
