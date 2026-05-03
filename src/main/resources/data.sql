@@ -1,0 +1,6 @@
+INSERT INTO games (id, name, price, release_year, cover_art_url) VALUES (1, 'Left 4 Dead 2', 9.99, 2009, 'https://upload.wikimedia.org/wikipedia/en/b/ba/Left4Dead2.jpg');
+INSERT INTO games (id, name, price, release_year, cover_art_url) VALUES (2, 'Mass Effect 2', 29.99, 2010, 'https://upload.wikimedia.org/wikipedia/en/0/05/MassEffect2_cover.PNG');
+INSERT INTO games (id, name, price, release_year, cover_art_url) VALUES (3, 'Yakuza 0', 19.99, 2015, 'https://m.media-amazon.com/images/M/MV5BZGMyMDBjZWMtMjFkNi00OWI1LWIyNmUtMDlkNDRiMjUyYWE2XkEyXkFqcGc@._V1_.jpg');
+INSERT INTO games (id, name, price, release_year, cover_art_url) VALUES (4, 'Red Dead Redemption 2', 59.99, 2018, 'https://www.vgchartz.com/articles_media/images/red-dead-redemption-2-cover-art-1.jpg');
+INSERT INTO games (id, name, price, release_year, cover_art_url) VALUES (5, 'Persona 5 Royal', 59.99, 2019, 'https://sm.ign.com/ign_de/cover/p/persona-5-/persona-5-royal_dkg8.jpg');
+INSERT INTO games (id, name, price, release_year, cover_art_url) VALUES (6, 'Devil May Cry 5', 29.99, 2019, 'https://upload.wikimedia.org/wikipedia/en/c/cb/Devil_May_Cry_5.jpg');

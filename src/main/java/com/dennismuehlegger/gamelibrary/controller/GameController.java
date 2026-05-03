@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/games")
 class GameController {
@@ -44,7 +45,7 @@ class GameController {
         gameService.delete(id);
     }
 
-    @PostMapping("/sort")
+    @GetMapping("/sort")
     public List<Game> sortGames(@RequestParam(required = false) Boolean releaseYear,
                                         @RequestParam(required = false) Boolean price,
                                         @RequestParam(required = false) Boolean name,

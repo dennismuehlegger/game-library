@@ -13,6 +13,7 @@ public class Game {
     private String name;
     private double price;
     private int releaseYear;
+    private String coverArtUrl;
 
     public Long getId() {
         return id;
@@ -44,6 +45,14 @@ public class Game {
 
     public void setReleaseYear(int releaseYear) {
         this.releaseYear = releaseYear;
+    }
+
+    public String getCoverArtUrl() {
+        return coverArtUrl;
+    }
+
+    public void setCoverArtUrl(String coverArtUrl) {
+        this.coverArtUrl = coverArtUrl;
     }
 
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
