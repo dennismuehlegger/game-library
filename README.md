@@ -20,7 +20,6 @@ browse games, make purchases, and manage their library.
 - Authentication (login / registration)
 - Transaction system improvements
 - Expanded filtering & sorting
-- Grid-based UI with cover art — tabs for store, library, and transaction history
 
 ---
 
@@ -37,3 +36,8 @@ browse games, make purchases, and manage their library.
 ./mvnw spring-boot:run
 ```
 Then access `http://localhost:8080/users`
+
+---
+
+## Related
+[Game Library UI](https://github.com/dennismuehlegger/game-library-ui) — Frontend interface for this API
