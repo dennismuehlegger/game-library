@@ -69,7 +69,7 @@ public class UserService {
             return;
         }
 
-        if (user.getFunds() < game.getPrice()) {
+        if (game.getPrice() > user.getFunds()) {
             System.out.println("Not enough funds.");
             return;
         }

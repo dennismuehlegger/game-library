@@ -4,3 +4,7 @@ INSERT INTO games (id, name, price, release_year, cover_art_url) VALUES (3, 'Yak
 INSERT INTO games (id, name, price, release_year, cover_art_url) VALUES (4, 'Red Dead Redemption 2', 59.99, 2018, 'https://www.vgchartz.com/articles_media/images/red-dead-redemption-2-cover-art-1.jpg');
 INSERT INTO games (id, name, price, release_year, cover_art_url) VALUES (5, 'Persona 5 Royal', 59.99, 2019, 'https://sm.ign.com/ign_de/cover/p/persona-5-/persona-5-royal_dkg8.jpg');
 INSERT INTO games (id, name, price, release_year, cover_art_url) VALUES (6, 'Devil May Cry 5', 29.99, 2019, 'https://upload.wikimedia.org/wikipedia/en/c/cb/Devil_May_Cry_5.jpg');
+INSERT INTO users (id, username, email, funds) VALUES (1, 'Dennis', 'muhleggerd@outlook.de', 100.00);
+INSERT INTO users (id, username, email, funds) VALUES (2, 'Samantha', 'samuehlegger@gmail.com', 30.00);
+ALTER SEQUENCE USERS_SEQ RESTART WITH 3;
+ALTER SEQUENCE GAMES_SEQ RESTART WITH 7;
