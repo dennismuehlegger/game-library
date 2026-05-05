@@ -1,6 +1,7 @@
 package com.dennismuehlegger.gamelibrary.controller;
 
 import com.dennismuehlegger.gamelibrary.entity.User;
+import com.dennismuehlegger.gamelibrary.enums.PurchaseResult;
 import com.dennismuehlegger.gamelibrary.repository.UserRepository;
 import com.dennismuehlegger.gamelibrary.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -48,13 +49,26 @@ class UserController {
         userService.delete(id);
     }
 
-    // todo - fix responses
     @PostMapping("/{userId}/games/{gameId}/buy")
-    public ResponseEntity<Void> buyGame(@PathVariable Long userId, @PathVariable Long gameId) {
-        userService.buyGame(userId, gameId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<PurchaseResult> buyGame(@PathVariable Long userId, @PathVariable Long gameId) {
+        switch (userService.buyGame(userId, gameId)) {
+            case SUCCESS -> {
+                return ResponseEntity.ok(PurchaseResult.SUCCESS);
+            }
+            case INSUFFICIENT_FUNDS -> {
+                return ResponseEntity.badRequest().body(PurchaseResult.INSUFFICIENT_FUNDS);
+            }
+            case GAME_ALREADY_OWNED -> {
+                return ResponseEntity.badRequest().body(PurchaseResult.GAME_ALREADY_OWNED);
+            }
+            case USER_OR_GAME_NOT_FOUND -> {
+                return ResponseEntity.notFound().build();
+            }
+        }
+        return null;
     }
 
+    // todo - fix responses
     @GetMapping("/{userId}/history")
     public ResponseEntity<Void> getTransactionHistory(@PathVariable Long userId) {
         userService.getTransactionHistory(userId);

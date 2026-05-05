@@ -3,6 +3,7 @@ package com.dennismuehlegger.gamelibrary.service;
 import com.dennismuehlegger.gamelibrary.entity.Game;
 import com.dennismuehlegger.gamelibrary.entity.Library;
 import com.dennismuehlegger.gamelibrary.entity.User;
+import com.dennismuehlegger.gamelibrary.enums.PurchaseResult;
 import com.dennismuehlegger.gamelibrary.repository.GameRepository;
 import com.dennismuehlegger.gamelibrary.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -50,12 +51,12 @@ public class UserService {
     }
 
     @Transactional
-    public void buyGame(Long userId, Long gameId) {
+    public PurchaseResult buyGame(Long userId, Long gameId) {
         Optional<User> userOptional = userRepository.findById(userId);
         Optional<Game> gameOptional = gameRepository.findById(gameId);
 
         if (userOptional.isEmpty() || gameOptional.isEmpty()) {
-            return;
+            return PurchaseResult.USER_OR_GAME_NOT_FOUND;
         }
 
         User user = userOptional.get();
@@ -65,13 +66,11 @@ public class UserService {
                 .anyMatch(l -> l.getGame().getId().equals(game.getId()));
 
         if (alreadyOwned) {
-            System.out.println("Game already exists in the library.");
-            return;
+            return PurchaseResult.GAME_ALREADY_OWNED;
         }
 
         if (game.getPrice() > user.getFunds()) {
-            System.out.println("Not enough funds.");
-            return;
+            return PurchaseResult.INSUFFICIENT_FUNDS;
         }
 
         Library library = new Library();
@@ -82,6 +81,7 @@ public class UserService {
         user.setFunds(user.getFunds() - game.getPrice());
 
         userRepository.save(user);
+        return PurchaseResult.SUCCESS;
     }
 
     public void getTransactionHistory(Long userId) {
