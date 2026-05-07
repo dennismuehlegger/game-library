@@ -2,6 +2,7 @@ package com.dennismuehlegger.gamelibrary.controller;
 
 import com.dennismuehlegger.gamelibrary.entity.User;
 import com.dennismuehlegger.gamelibrary.enums.PurchaseResult;
+import com.dennismuehlegger.gamelibrary.enums.TransactionResult;
 import com.dennismuehlegger.gamelibrary.repository.UserRepository;
 import com.dennismuehlegger.gamelibrary.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -68,10 +69,19 @@ class UserController {
         return null;
     }
 
-    // todo - fix responses
     @GetMapping("/{userId}/history")
-    public ResponseEntity<Void> getTransactionHistory(@PathVariable Long userId) {
-        userService.getTransactionHistory(userId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<TransactionResult> getTransactionHistory(@PathVariable Long userId) {
+        switch (userService.getTransactionHistory(userId)) {
+            case SUCCESS -> {
+                return ResponseEntity.ok(TransactionResult.SUCCESS);
+            }
+            case NO_HISTORY -> {
+                return ResponseEntity.badRequest().body(TransactionResult.NO_HISTORY);
+            }
+            case NO_USER -> {
+                return ResponseEntity.badRequest().body(TransactionResult.NO_USER);
+            }
+        }
+        return null;
     }
 }

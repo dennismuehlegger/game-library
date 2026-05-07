@@ -4,6 +4,7 @@ import com.dennismuehlegger.gamelibrary.entity.Game;
 import com.dennismuehlegger.gamelibrary.entity.Library;
 import com.dennismuehlegger.gamelibrary.entity.User;
 import com.dennismuehlegger.gamelibrary.enums.PurchaseResult;
+import com.dennismuehlegger.gamelibrary.enums.TransactionResult;
 import com.dennismuehlegger.gamelibrary.repository.GameRepository;
 import com.dennismuehlegger.gamelibrary.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -84,13 +85,19 @@ public class UserService {
         return PurchaseResult.SUCCESS;
     }
 
-    public void getTransactionHistory(Long userId) {
+    public TransactionResult getTransactionHistory(Long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            user.getLibraries().forEach(library -> {
-                System.out.println(user + " has bought " + library.getGame().getName() + " for " + library.getGame().getPrice() + "€");
-            });
+            if (user.getLibraries() != null){
+                user.getLibraries().forEach(library -> {
+                    // this needs to change once frontend implementation is better
+                    System.out.println(user + " has bought " + library.getGame().getName() + " for " + library.getGame().getPrice() + "€");
+                });
+                return TransactionResult.SUCCESS;
+            }
+            return TransactionResult.NO_HISTORY;
         }
+        return TransactionResult.NO_USER;
     }
 }
