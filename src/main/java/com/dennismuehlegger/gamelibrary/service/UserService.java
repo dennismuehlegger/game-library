@@ -89,7 +89,7 @@ public class UserService {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            if (user.getLibraries() != null){
+            if (!user.getLibraries().isEmpty()){
                 user.getLibraries().forEach(library -> {
                     // this needs to change once frontend implementation is better
                     System.out.println(user + " has bought " + library.getGame().getName() + " for " + library.getGame().getPrice() + "€");
