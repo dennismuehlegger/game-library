@@ -2,6 +2,7 @@ package com.dennismuehlegger.gamelibrary.controller;
 
 import com.dennismuehlegger.gamelibrary.dto.TransactionHistoryDTO;
 import com.dennismuehlegger.gamelibrary.entity.User;
+import com.dennismuehlegger.gamelibrary.enums.PlayResult;
 import com.dennismuehlegger.gamelibrary.enums.PurchaseResult;
 import com.dennismuehlegger.gamelibrary.repository.UserRepository;
 import com.dennismuehlegger.gamelibrary.service.UserService;
@@ -64,6 +65,22 @@ class UserController {
             }
             case USER_OR_GAME_NOT_FOUND -> {
                 return ResponseEntity.notFound().build();
+            }
+        }
+        return null;
+    }
+
+    @PutMapping("/{userId}/games/{gameId}/play")
+    public ResponseEntity<PlayResult> playGame(@PathVariable Long userId, @PathVariable Long gameId) {
+        switch (userService.playGame(userId, gameId)) {
+            case SUCCESS -> {
+                return ResponseEntity.ok(PlayResult.SUCCESS);
+            }
+            case USER_OR_GAME_NOT_FOUND -> {
+                return ResponseEntity.badRequest().body(PlayResult.USER_OR_GAME_NOT_FOUND);
+            }
+            case GAME_NOT_OWNED -> {
+                return ResponseEntity.badRequest().body(PlayResult.GAME_NOT_OWNED);
             }
         }
         return null;

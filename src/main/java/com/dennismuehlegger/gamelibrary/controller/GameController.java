@@ -47,8 +47,8 @@ class GameController {
 
     @GetMapping("/sort")
     public List<Game> sortGames(@RequestParam(required = false) Boolean releaseYear,
-                                        @RequestParam(required = false) Boolean price,
-                                        @RequestParam(required = false) Boolean name,
+                                @RequestParam(required = false) Boolean price,
+                                @RequestParam(required = false) Boolean name,
                                 @RequestParam(required = false) Boolean descending) {
         List<Game> games = gameService.findAll();
         return gameService.sortGames(games, releaseYear, price, name, descending);

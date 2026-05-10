@@ -5,6 +5,7 @@ import com.dennismuehlegger.gamelibrary.dto.TransactionItemDTO;
 import com.dennismuehlegger.gamelibrary.entity.Game;
 import com.dennismuehlegger.gamelibrary.entity.Library;
 import com.dennismuehlegger.gamelibrary.entity.User;
+import com.dennismuehlegger.gamelibrary.enums.PlayResult;
 import com.dennismuehlegger.gamelibrary.enums.PurchaseResult;
 import com.dennismuehlegger.gamelibrary.enums.TransactionResult;
 import com.dennismuehlegger.gamelibrary.repository.GameRepository;
@@ -85,6 +86,30 @@ public class UserService {
 
         userRepository.save(user);
         return PurchaseResult.SUCCESS;
+    }
+
+    public PlayResult playGame(Long userId, Long gameId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        Optional<Game> gameOptional = gameRepository.findById(gameId);
+
+        if (userOptional.isEmpty() || gameOptional.isEmpty()) {
+            return PlayResult.USER_OR_GAME_NOT_FOUND;
+        }
+
+        User user = userOptional.get();
+        Game game = gameOptional.get();
+
+        Library library = user.getLibraries().stream()
+                .filter(l -> l.getGame().getId().equals(game.getId()))
+                .findFirst()
+                .orElse(null);
+
+        if (library != null) {
+            library.setHoursPlayed(library.getHoursPlayed() + 1);
+            userRepository.save(user);
+            return PlayResult.SUCCESS;
+        }
+        return PlayResult.GAME_NOT_OWNED;
     }
 
     public TransactionHistoryDTO getTransactionHistory(Long userId) {
