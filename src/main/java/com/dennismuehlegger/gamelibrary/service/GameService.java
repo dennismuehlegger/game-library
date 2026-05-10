@@ -4,6 +4,7 @@ import com.dennismuehlegger.gamelibrary.entity.Game;
 import com.dennismuehlegger.gamelibrary.repository.GameRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 
@@ -38,12 +39,12 @@ public class GameService {
         gameRepository.deleteById(id);
     }
 
-    public List<Game> filterGames(List<Game> games, Integer releaseYear, Double minPrice, Double maxPrice, Double exactPrice, String name) {
+    public List<Game> filterGames(List<Game> games, Integer releaseYear, BigDecimal minPrice, BigDecimal maxPrice, BigDecimal exactPrice, String name) {
         return games.stream()
                 .filter(game -> releaseYear == null || game.getReleaseYear() == releaseYear)
-                .filter(game -> exactPrice == null || game.getPrice() == exactPrice)
-                .filter(game -> exactPrice != null || minPrice == null || game.getPrice() >= minPrice)
-                .filter(game -> exactPrice != null || maxPrice == null || game.getPrice() <= maxPrice)
+                .filter(game -> exactPrice == null || game.getPrice().compareTo(exactPrice) == 0)
+                .filter(game -> exactPrice != null || minPrice == null || game.getPrice().compareTo(minPrice) >= 0)
+                .filter(game -> exactPrice != null || maxPrice == null || game.getPrice().compareTo(maxPrice) <= 0)
                 .filter(game -> name == null || game.getName().equalsIgnoreCase(name))
                 .toList();
     }

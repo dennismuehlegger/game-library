@@ -2,6 +2,7 @@ package com.dennismuehlegger.gamelibrary.entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -12,7 +13,7 @@ public class User {
     private Long id;
     private String username;
     private String email;
-    private double funds;
+    private BigDecimal funds;
 
     public Long getId() {
         return id;
@@ -38,11 +39,11 @@ public class User {
         this.email = email;
     }
 
-    public double getFunds() {
+    public BigDecimal getFunds() {
         return funds;
     }
 
-    public void setFunds(double funds) {
+    public void setFunds(BigDecimal funds) {
         this.funds = funds;
     }
 

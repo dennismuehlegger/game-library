@@ -1,10 +1,12 @@
 package com.dennismuehlegger.gamelibrary.dto;
 
+import java.math.BigDecimal;
+
 public class TransactionItemDTO {
     private String gameName;
-    private double price;
+    private BigDecimal price;
 
-    public TransactionItemDTO(String gameName, double price) {
+    public TransactionItemDTO(String gameName, BigDecimal price) {
         this.gameName = gameName;
         this.price = price;
     }
@@ -17,11 +19,11 @@ public class TransactionItemDTO {
         this.gameName = gameName;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 }

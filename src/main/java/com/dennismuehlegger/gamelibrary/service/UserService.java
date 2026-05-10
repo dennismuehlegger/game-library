@@ -73,7 +73,7 @@ public class UserService {
             return PurchaseResult.GAME_ALREADY_OWNED;
         }
 
-        if (game.getPrice() > user.getFunds()) {
+        if (user.getFunds().compareTo(game.getPrice()) < 0) {
             return PurchaseResult.INSUFFICIENT_FUNDS;
         }
 
@@ -82,7 +82,7 @@ public class UserService {
         library.setUser(user);
 
         user.getLibraries().add(library);
-        user.setFunds(user.getFunds() - game.getPrice());
+        user.setFunds(user.getFunds().subtract(game.getPrice()));
 
         userRepository.save(user);
         return PurchaseResult.SUCCESS;

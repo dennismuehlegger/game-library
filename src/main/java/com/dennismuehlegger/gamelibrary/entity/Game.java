@@ -2,6 +2,7 @@ package com.dennismuehlegger.gamelibrary.entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -11,7 +12,7 @@ public class Game {
     @GeneratedValue
     private Long id;
     private String name;
-    private double price;
+    private BigDecimal price;
     private int releaseYear;
     private String coverArtUrl;
 
@@ -31,11 +32,11 @@ public class Game {
         this.name = name;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

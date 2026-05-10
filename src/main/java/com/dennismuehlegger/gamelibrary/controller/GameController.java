@@ -5,6 +5,7 @@ import com.dennismuehlegger.gamelibrary.repository.GameRepository;
 import com.dennismuehlegger.gamelibrary.service.GameService;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -26,9 +27,9 @@ class GameController {
     @GetMapping
     public List<Game> getGames(
             @RequestParam(required = false) Integer releaseYear,
-            @RequestParam(required = false) Double minPrice,
-            @RequestParam(required = false) Double maxPrice,
-            @RequestParam(required = false) Double exactPrice,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(required = false) BigDecimal exactPrice,
             @RequestParam(required = false) String name
     ) {
         List<Game> games = gameService.findAll();
