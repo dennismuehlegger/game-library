@@ -1,8 +1,8 @@
 package com.dennismuehlegger.gamelibrary.controller;
 
+import com.dennismuehlegger.gamelibrary.dto.TransactionHistoryDTO;
 import com.dennismuehlegger.gamelibrary.entity.User;
 import com.dennismuehlegger.gamelibrary.enums.PurchaseResult;
-import com.dennismuehlegger.gamelibrary.enums.TransactionResult;
 import com.dennismuehlegger.gamelibrary.repository.UserRepository;
 import com.dennismuehlegger.gamelibrary.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -70,16 +70,17 @@ class UserController {
     }
 
     @GetMapping("/{userId}/history")
-    public ResponseEntity<TransactionResult> getTransactionHistory(@PathVariable Long userId) {
-        switch (userService.getTransactionHistory(userId)) {
+    public ResponseEntity<TransactionHistoryDTO> getTransactionHistory(@PathVariable Long userId) {
+        TransactionHistoryDTO transactionHistoryDTO = userService.getTransactionHistory(userId);
+        switch (transactionHistoryDTO.getResult()) {
             case SUCCESS -> {
-                return ResponseEntity.ok(TransactionResult.SUCCESS);
+                return ResponseEntity.ok(transactionHistoryDTO);
             }
             case NO_HISTORY -> {
-                return ResponseEntity.badRequest().body(TransactionResult.NO_HISTORY);
+                return ResponseEntity.badRequest().body(transactionHistoryDTO);
             }
             case NO_USER -> {
-                return ResponseEntity.badRequest().body(TransactionResult.NO_USER);
+                return ResponseEntity.notFound().build();
             }
         }
         return null;

@@ -1,5 +1,7 @@
 package com.dennismuehlegger.gamelibrary.service;
 
+import com.dennismuehlegger.gamelibrary.dto.TransactionHistoryDTO;
+import com.dennismuehlegger.gamelibrary.dto.TransactionItemDTO;
 import com.dennismuehlegger.gamelibrary.entity.Game;
 import com.dennismuehlegger.gamelibrary.entity.Library;
 import com.dennismuehlegger.gamelibrary.entity.User;
@@ -85,19 +87,28 @@ public class UserService {
         return PurchaseResult.SUCCESS;
     }
 
-    public TransactionResult getTransactionHistory(Long userId) {
+    public TransactionHistoryDTO getTransactionHistory(Long userId) {
+        TransactionHistoryDTO transactionHistoryDTO = new TransactionHistoryDTO();
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             if (!user.getLibraries().isEmpty()){
-                user.getLibraries().forEach(library -> {
-                    // this needs to change once frontend implementation is better
-                    System.out.println(user + " has bought " + library.getGame().getName() + " for " + library.getGame().getPrice() + "€");
-                });
-                return TransactionResult.SUCCESS;
+                List<TransactionItemDTO> items = user.getLibraries().stream()
+                        .map(library -> new TransactionItemDTO(
+                                library.getGame().getName(),
+                                library.getGame().getPrice()
+                        ))
+                        .toList();
+
+                transactionHistoryDTO.setResult(TransactionResult.SUCCESS);
+                transactionHistoryDTO.setTransactions(items);
+                return transactionHistoryDTO;
+
             }
-            return TransactionResult.NO_HISTORY;
+            transactionHistoryDTO.setResult(TransactionResult.NO_HISTORY);
+            return transactionHistoryDTO;
         }
-        return TransactionResult.NO_USER;
+        transactionHistoryDTO.setResult(TransactionResult.NO_USER);
+        return null;
     }
 }

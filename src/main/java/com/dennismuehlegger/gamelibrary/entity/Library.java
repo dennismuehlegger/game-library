@@ -15,7 +15,6 @@ public class Library {
     private User user;
 
     @ManyToOne
-    @JsonIgnore
     private Game game;
 
     private int hoursPlayed;
