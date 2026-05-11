@@ -1,5 +1,6 @@
 package com.dennismuehlegger.gamelibrary.service;
 
+import com.dennismuehlegger.gamelibrary.dto.LibraryDTO;
 import com.dennismuehlegger.gamelibrary.dto.TransactionHistoryDTO;
 import com.dennismuehlegger.gamelibrary.dto.TransactionItemDTO;
 import com.dennismuehlegger.gamelibrary.entity.Game;
@@ -86,6 +87,34 @@ public class UserService {
 
         userRepository.save(user);
         return PurchaseResult.SUCCESS;
+    }
+
+    public List<Game> getUserLibrary(Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (!user.getLibraries().isEmpty()){
+                return user.getLibraries().stream().map(Library::getGame).toList();
+            }
+        }
+        return List.of();
+    }
+
+    public List<LibraryDTO> mapToLibraryDTO(Long userId, List<Game> games) {
+        return games.stream()
+                .map(game -> new LibraryDTO(
+                        game.getId(),
+                        game.getName(),
+                        game.getPrice(),
+                        game.getReleaseYear(),
+                        game.getCoverArtUrl(),
+                        userRepository.findById(userId).get().getLibraries().stream()
+                                .filter(library -> library.getGame().getId().equals(game.getId()))
+                                .findFirst()
+                                .map(Library::getHoursPlayed)
+                                .orElse(0)
+                ))
+                .toList();
     }
 
     public PlayResult playGame(Long userId, Long gameId) {

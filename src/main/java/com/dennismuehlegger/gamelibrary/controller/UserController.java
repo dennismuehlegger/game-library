@@ -1,14 +1,18 @@
 package com.dennismuehlegger.gamelibrary.controller;
 
+import com.dennismuehlegger.gamelibrary.dto.LibraryDTO;
 import com.dennismuehlegger.gamelibrary.dto.TransactionHistoryDTO;
+import com.dennismuehlegger.gamelibrary.entity.Game;
 import com.dennismuehlegger.gamelibrary.entity.User;
 import com.dennismuehlegger.gamelibrary.enums.PlayResult;
 import com.dennismuehlegger.gamelibrary.enums.PurchaseResult;
 import com.dennismuehlegger.gamelibrary.repository.UserRepository;
+import com.dennismuehlegger.gamelibrary.service.GameService;
 import com.dennismuehlegger.gamelibrary.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -18,9 +22,11 @@ class UserController {
 
 
     private final UserService userService;
+    private final GameService gameService;
 
-    UserController(UserRepository repository, UserService userService) {
+    UserController(UserRepository repository, UserService userService, GameService gameService) {
         this.userService = userService;
+        this.gameService = gameService;
     }
 
 
@@ -68,6 +74,23 @@ class UserController {
             }
         }
         return null;
+    }
+
+    @GetMapping("/{userId}/library")
+    public ResponseEntity<List<LibraryDTO>> getUserLibrary(@PathVariable Long userId, @RequestParam(required = false) Integer releaseYear,
+                                                           @RequestParam(required = false) BigDecimal minPrice,
+                                                           @RequestParam(required = false) BigDecimal maxPrice,
+                                                           @RequestParam(required = false) BigDecimal exactPrice,
+                                                           @RequestParam(required = false) String name,
+                                                           @RequestParam(required = false) Boolean sortByReleaseYear,
+                                                           @RequestParam(required = false) Boolean sortByPrice,
+                                                           @RequestParam(required = false) Boolean sortByName,
+                                                           @RequestParam(required = false) Boolean descending) {
+        List<Game> games = userService.getUserLibrary(userId);
+        games = gameService.filterGames(games, releaseYear, minPrice, maxPrice, exactPrice, name);
+        games = gameService.sortGames(games, sortByReleaseYear, sortByPrice, sortByName, descending);
+        List<LibraryDTO> result = userService.mapToLibraryDTO(userId, games);
+        return ResponseEntity.ok(result);
     }
 
     @PutMapping("/{userId}/games/{gameId}/play")
