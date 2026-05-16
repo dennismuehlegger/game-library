@@ -6,9 +6,8 @@ import com.dennismuehlegger.gamelibrary.dto.TransactionItemDTO;
 import com.dennismuehlegger.gamelibrary.entity.Game;
 import com.dennismuehlegger.gamelibrary.entity.Library;
 import com.dennismuehlegger.gamelibrary.entity.User;
-import com.dennismuehlegger.gamelibrary.enums.PlayResult;
-import com.dennismuehlegger.gamelibrary.enums.PurchaseResult;
 import com.dennismuehlegger.gamelibrary.enums.TransactionResult;
+import com.dennismuehlegger.gamelibrary.exception.*;
 import com.dennismuehlegger.gamelibrary.repository.GameRepository;
 import com.dennismuehlegger.gamelibrary.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -56,26 +55,21 @@ public class UserService {
     }
 
     @Transactional
-    public PurchaseResult buyGame(Long userId, Long gameId) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        Optional<Game> gameOptional = gameRepository.findById(gameId);
-
-        if (userOptional.isEmpty() || gameOptional.isEmpty()) {
-            return PurchaseResult.USER_OR_GAME_NOT_FOUND;
-        }
-
-        User user = userOptional.get();
-        Game game = gameOptional.get();
+    public void buyGame(Long userId, Long gameId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow(() -> new GameNotFoundException("Game not found: " + gameId));
 
         boolean alreadyOwned = user.getLibraries().stream()
                 .anyMatch(l -> l.getGame().getId().equals(game.getId()));
 
         if (alreadyOwned) {
-            return PurchaseResult.GAME_ALREADY_OWNED;
+            throw new GameAlreadyOwnedException("You already own " + game.getName() + "!");
         }
 
         if (user.getFunds().compareTo(game.getPrice()) < 0) {
-            return PurchaseResult.INSUFFICIENT_FUNDS;
+            throw new InsufficientFundsException("You do not enough funds to buy " + game.getName() + "!");
         }
 
         Library library = new Library();
@@ -86,7 +80,6 @@ public class UserService {
         user.setFunds(user.getFunds().subtract(game.getPrice()));
 
         userRepository.save(user);
-        return PurchaseResult.SUCCESS;
     }
 
     public List<Game> getUserLibrary(Long userId) {
@@ -117,28 +110,23 @@ public class UserService {
                 .toList();
     }
 
-    public PlayResult playGame(Long userId, Long gameId) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        Optional<Game> gameOptional = gameRepository.findById(gameId);
+    public void playGame(Long userId, Long gameId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow(() -> new GameNotFoundException("Game not found: " + gameId));
 
-        if (userOptional.isEmpty() || gameOptional.isEmpty()) {
-            return PlayResult.USER_OR_GAME_NOT_FOUND;
-        }
-
-        User user = userOptional.get();
-        Game game = gameOptional.get();
-
-        Library library = user.getLibraries().stream()
+        Library libraryGame = user.getLibraries().stream()
                 .filter(l -> l.getGame().getId().equals(game.getId()))
                 .findFirst()
                 .orElse(null);
 
-        if (library != null) {
-            library.setHoursPlayed(library.getHoursPlayed() + 1);
+        if (libraryGame != null) {
+            libraryGame.setHoursPlayed(libraryGame.getHoursPlayed() + 1);
             userRepository.save(user);
-            return PlayResult.SUCCESS;
+        } else {
+            throw new GameNotOwnedException("You do not own " + game.getName()+ "!");
         }
-        return PlayResult.GAME_NOT_OWNED;
     }
 
     public TransactionHistoryDTO getTransactionHistory(Long userId) {

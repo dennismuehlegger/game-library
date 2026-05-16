@@ -4,8 +4,6 @@ import com.dennismuehlegger.gamelibrary.dto.LibraryDTO;
 import com.dennismuehlegger.gamelibrary.dto.TransactionHistoryDTO;
 import com.dennismuehlegger.gamelibrary.entity.Game;
 import com.dennismuehlegger.gamelibrary.entity.User;
-import com.dennismuehlegger.gamelibrary.enums.PlayResult;
-import com.dennismuehlegger.gamelibrary.enums.PurchaseResult;
 import com.dennismuehlegger.gamelibrary.repository.UserRepository;
 import com.dennismuehlegger.gamelibrary.service.GameService;
 import com.dennismuehlegger.gamelibrary.service.UserService;
@@ -58,22 +56,9 @@ class UserController {
     }
 
     @PostMapping("/{userId}/games/{gameId}/buy")
-    public ResponseEntity<PurchaseResult> buyGame(@PathVariable Long userId, @PathVariable Long gameId) {
-        switch (userService.buyGame(userId, gameId)) {
-            case SUCCESS -> {
-                return ResponseEntity.ok(PurchaseResult.SUCCESS);
-            }
-            case INSUFFICIENT_FUNDS -> {
-                return ResponseEntity.badRequest().body(PurchaseResult.INSUFFICIENT_FUNDS);
-            }
-            case GAME_ALREADY_OWNED -> {
-                return ResponseEntity.badRequest().body(PurchaseResult.GAME_ALREADY_OWNED);
-            }
-            case USER_OR_GAME_NOT_FOUND -> {
-                return ResponseEntity.notFound().build();
-            }
-        }
-        return null;
+    public ResponseEntity<Void> buyGame(@PathVariable Long userId, @PathVariable Long gameId) {
+        userService.buyGame(userId, gameId);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{userId}/library")
@@ -94,19 +79,9 @@ class UserController {
     }
 
     @PutMapping("/{userId}/games/{gameId}/play")
-    public ResponseEntity<PlayResult> playGame(@PathVariable Long userId, @PathVariable Long gameId) {
-        switch (userService.playGame(userId, gameId)) {
-            case SUCCESS -> {
-                return ResponseEntity.ok(PlayResult.SUCCESS);
-            }
-            case USER_OR_GAME_NOT_FOUND -> {
-                return ResponseEntity.badRequest().body(PlayResult.USER_OR_GAME_NOT_FOUND);
-            }
-            case GAME_NOT_OWNED -> {
-                return ResponseEntity.badRequest().body(PlayResult.GAME_NOT_OWNED);
-            }
-        }
-        return null;
+    public ResponseEntity<Void> playGame(@PathVariable Long userId, @PathVariable Long gameId) {
+        userService.playGame(userId, gameId);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{userId}/history")
