@@ -151,6 +151,6 @@ public class UserService {
             return transactionHistoryDTO;
         }
         transactionHistoryDTO.setResult(TransactionResult.NO_USER);
-        return null;
+        return transactionHistoryDTO;
     }
 }
