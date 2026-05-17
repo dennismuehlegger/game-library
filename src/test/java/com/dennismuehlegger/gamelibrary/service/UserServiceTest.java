@@ -30,11 +30,11 @@ public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    @InjectMocks
-    UserService userService;
-
     @Mock
     private GameRepository gameRepository;
+
+    @InjectMocks
+    UserService userService;
 
     @Test
     public void testBuyGame_Success(){

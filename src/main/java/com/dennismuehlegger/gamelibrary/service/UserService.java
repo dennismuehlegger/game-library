@@ -69,7 +69,7 @@ public class UserService {
         }
 
         if (user.getFunds().compareTo(game.getPrice()) < 0) {
-            throw new InsufficientFundsException("You do not enough funds to buy " + game.getName() + "!");
+            throw new InsufficientFundsException("You do not have enough funds to buy " + game.getName() + "!");
         }
 
         Library library = new Library();
