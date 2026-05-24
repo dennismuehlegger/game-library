@@ -30,10 +30,15 @@ class GameController {
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
             @RequestParam(required = false) BigDecimal exactPrice,
-            @RequestParam(required = false) String name
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Boolean sortByPrice,
+            @RequestParam(required = false) Boolean sortByName,
+            @RequestParam(required = false) Boolean sortByReleaseYear,
+            @RequestParam(required = false) Boolean descending
     ) {
         List<Game> games = gameService.findAll();
-        return gameService.filterGames(games, releaseYear, minPrice, maxPrice, exactPrice, name);
+        games = gameService.filterGames(games, releaseYear, minPrice, maxPrice, exactPrice, name);
+        return gameService.sortGames(games, sortByReleaseYear, sortByPrice, sortByName, descending);
     }
 
     @PutMapping("/{id}")
@@ -44,15 +49,6 @@ class GameController {
     @DeleteMapping("/{id}")
     void deleteGame(@PathVariable Long id) {
         gameService.delete(id);
-    }
-
-    @GetMapping("/sort")
-    public List<Game> sortGames(@RequestParam(required = false) Boolean releaseYear,
-                                @RequestParam(required = false) Boolean price,
-                                @RequestParam(required = false) Boolean name,
-                                @RequestParam(required = false) Boolean descending) {
-        List<Game> games = gameService.findAll();
-        return gameService.sortGames(games, releaseYear, price, name, descending);
     }
 }
 
